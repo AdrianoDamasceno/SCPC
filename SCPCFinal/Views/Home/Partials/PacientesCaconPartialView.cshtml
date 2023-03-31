@@ -1,0 +1,52 @@
+﻿@model SCPCFinal.Models.Relatorios.PacientesCaconModelPV
+@{
+}
+
+<h3>Relatórios - Pacientes CACON</h3>
+
+<table id="tabelaCacon">
+    <thead>
+    <th>codpac</th>
+    <th>nomepac</th>
+    <th>datanasc</th>
+    <th>extra01</th>
+    <th>extra02</th>
+    <th>extra03</th>
+    <th>extra04</th>
+    <th>extra05</th>
+    <th>extra06</th>
+    <th>extra07</th>
+    <th>extra08</th>
+    <th>extra09</th>
+    <th>extra10</th>
+    <th>extra11</th>
+    <th>extra12</th>
+    </thead>
+    <tbody>
+        @if (Model.pacientesCacon is not null)
+        {
+
+            @foreach (var item in Model.pacientesCacon)
+            {
+                <tr>
+                    <td>@item.codpac</td>
+                    <td>@item.nomepac</td>
+                    <td>@item.datanasc</td>
+                    <td>@item.extra01</td>
+                    <td>@item.extra02</td>
+                    <td>@item.extra03</td>
+                    <td>@item.extra04</td>
+                    <td>@item.extra05</td>
+                    <td>@item.extra06</td>
+                    <td>@item.extra07</td>
+                    <td>@item.extra08</td>
+                    <td>@item.extra09</td>
+                    <td>@item.extra10</td>
+                    <td>@item.extra11</td>
+                    <td>@item.extra12</td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>

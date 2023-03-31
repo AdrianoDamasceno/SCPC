@@ -1,0 +1,173 @@
+﻿@model SCPCFinal.Models.Relatorios.TabelaConsumosModel
+    
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+
+        $(document).ready(function () {
+           
+            $('#data-inicialConsumos').mask('00/00/0000');
+            $('#data-finalConsumos').mask('00/00/0000');
+
+            
+        });
+
+    </script>
+
+<h3>Relatórios - Consumos do Paciente no Período </h3>
+
+<table>
+    <thead>
+    <th colspan="6">
+        Data: <input id="data-inicialConsumos" placeholder="XX/XX/XXXX" /> a <input id="data-finalConsumos" placeholder="XX/XX/XXXX" />
+        <label for="selectConsumosPeriodo" style="margin-left:40px">Tipo de Consumo:</label>
+        <select id="selectConsumosPeriodo" name="selectConsumosPeriodo" style="font-size:larger; font-weight:200; padding: 2px; vertical-align:top">
+            <option value="S">Serviços</option>
+            <option value="P">Produtos</option>
+        </select>
+        <button id="btnConsumosPaciente" onclick="buscaConsumosPaciente()" style="margin-left:40px">Buscar</button>
+    </th>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="font-weight:700;">Atendimento</td>
+            <td style="font-weight:700;">Data</td>
+            <td style="font-weight:700;">Centro de Custo</td>
+            <td style="font-weight:700;">Descrição</td>
+            <td style="font-weight:700;">Quantidade</td>
+            <td style="font-weight:700;">Valor Un.</td>
+        </tr>
+            @if (Model.servicosPeriodoModel is not null)
+            {
+
+                @foreach (var item in Model.servicosPeriodoModel)
+                {
+                    <tr>
+                        <td>@item.numatend</td>
+                        <td>@item.datacons</td>
+                        <td>@item.nomecc</td>
+                        <td>@item.descintsv</td>
+                        <td>@item.Quantidade</td>
+                        <td>@item.ValorUni</td>
+                    </tr>
+                }
+            }
+        
+        
+            @if (Model.produtosPeriodo is not null)
+            {
+                @foreach (var item in Model.produtosPeriodo)
+                {
+                    <tr>
+                        <td>@item.numatend</td>
+                        <td>@item.datacons</td>
+                        <td>@item.nomecc</td>
+                        <td>@item.descricao</td>
+                        <td>@item.Quantidade</td>
+                        <td>@item.ValorUni</td>
+                    </tr>
+                }
+            }        
+
+    </tbody>
+</table>
+
+<script>
+
+    function getSearchParams(k) {
+        var p = {};
+        location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (s, k, v) { p[k] = v })
+        return k ? p[k] : p;
+    }
+
+    function buscaConsumosPaciente() {
+        var dataInicial = $("#data-inicialConsumos")[0].value;
+        var dataFinal = $("#data-finalConsumos")[0].value;
+        var opcao = $('#selectConsumosPeriodo option:selected').val();
+        var searchParams = new URLSearchParams(window.location.search);
+        var codpac = 0;
+
+        codpac = getSearchParams('codpac');
+        //if(searchParams.has('codpac')){
+        //    codpac = searchParams.get('codpac');
+        //}
+
+
+        var tmpI = dataInicial.split('/');
+        var tmpF = dataFinal.split('/');
+
+        var diaI = tmpI[0];
+        var mesI = tmpI[1];
+        var anoI = tmpI[2];
+
+        var diaF = tmpF[0];
+        var mesF = tmpF[1];
+        var anoF = tmpF[2];
+
+        if (dataInicial != null || dataInicial != '') {
+            if (dataFinal != null || dataFinal != '') {
+
+
+                console.log("dia:" + diaI + " mes:" + mesI + " ano:" + anoI);
+                console.log("dia:" + diaF + " mes:" + mesF + " ano:" + anoF);
+
+
+
+                if ((diaI > 0 && diaF > 0) && (diaI < 32 && diaF < 32)) {
+                    if ((mesI > 0 && mesF > 0) && (mesI < 13 && mesF < 13)) {
+                        if ((anoI > 1900 && anoF > 1900) && (anoI < 2050 && anoF < 2050)) {
+                            if ((anoF > anoI) && ((mesF - mesI) <= 1)) {
+
+                                if ((anoF > anoI) && (mesI == 12 && mesF == 1)) {
+
+                                    console.log("data aceitável")
+                                }
+                                else alert("Favor inserir intervalo menor que 30 dias.")
+                            }
+                            else if ((anoF == anoI) && ((mesF - mesI) > 1)) {
+                                alert("Favor inserir intervalo menor que 30 dias.")
+                            }
+                            else if ((anoF == anoI) && ((mesF - mesI) == 1) && (diaI < diaF)) {
+                                alert("Favor inserir intervalo menor que 30 dias.")
+                            }
+                            else if ((anoF < anoI) || (anoF == anoI && (mesF < mesI)) || (mesF == mesI && diaF < diaI)) {
+                                alert("Favor inserir data corretamente.")
+                            }
+                        }
+                        else {
+                            alert("Ano inválido!")
+                        }
+                    }
+                    else {
+                        alert("Mês inválido!")
+                    }
+                }
+                else alert("Dia inválido!")
+
+            }
+        }
+
+        var data1 = anoI + "-" + mesI + "-" + diaI + " 00:00:00";
+        var data2 = anoF + "-" + mesF + "-" + diaF + " 23:59:59";
+
+        console.log("DATA1" + data1);
+
+        //document.getElementById('tabelaServicosPeriodo').style.display='none';
+        //document.getElementById('tabelaProdutosPeriodo').style.display='none';
+
+        var urlcomparam = "TabelaConsumos";
+
+        urlcomparam += "?";
+        urlcomparam += "opcao=" + opcao;
+        urlcomparam += "&codpac=" + codpac;
+        urlcomparam += "&data1=" + data1;
+        urlcomparam += "&data2=" + data2;
+
+        $("#consumosDoPacientePeriodo").html();
+        $.get('/Home/' + urlcomparam, function (data) {
+            console.log("consumosDoPacientePeriodo");
+            $("#consumosDoPacientePeriodo").html(data);
+        });
+
+    }

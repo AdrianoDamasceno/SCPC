@@ -1,0 +1,211 @@
+﻿@model RelatorioPacientesInternadosPeriodo
+
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#data-inicial').mask('00/00/0000');
+        $('#data-final').mask('00/00/0000');
+        
+
+    });
+
+</script>
+    <h3>Relatórios - Internados no Período</h3>
+
+    <table>
+        <thead>
+        <th colspan="9">
+            Data: <input id="data-inicial" placeholder="XX/XX/XXXX" /> a <input id="data-final" placeholder="XX/XX/XXXX" />
+            <button id="btnDataPaciente" onclick="buscaInternacaoPaciente()" style="margin-left:30px">Buscar</button>
+        </th>
+        </thead>
+
+        <tbody>   
+                            <tr>
+                                <td style="font-weight:700">NumAtend</td>
+                                <td style="font-weight:700">TipoAtend</td>
+                                <td style="font-weight:700">Paciente</td>
+                                <td style="font-weight:700">DataAtend</td>
+                                <td style="font-weight:700">DataSai</td>
+                                <td style="font-weight:700">CodPlano</td>
+                                <td style="font-weight:700">NomeServ</td>
+                                <td style="font-weight:700">CentroCusto</td>
+                                <td style="font-weight:700">Leito</td>
+                            </tr>
+                           
+
+                        @if (Model.listaInternacaoPeriodo is not null)
+                        {
+                            
+                            @foreach (var item in Model.listaInternacaoPeriodo)
+                            {
+                                string tipoform = "_listaInternacaoPeriodo";
+                                string linhaid = item.NumAtend;
+                                string linha_cab = linhaid + tipoform + "_cab";
+                                string linha_corpo = linhaid + tipoform + "_corpo";
+                                string onclick = String.Format("CliqueLinhaCab('{0}', '{1}')", linhaid, tipoform);
+                                string duploclick = String.Format("DuploCliqueLinhaCorpo('{0}', '{1}')", linhaid, tipoform);
+
+                            <tbody>
+                                <tr class="linha_cab_evolucao" id="@linha_cab" onclick="@onclick">
+                                    <td>@item.NumAtend</td>                                    
+                                    <td>@item.TipoAtend</td>
+                                    <td>@item.Paciente</td>
+                                    <td>@item.DataAtend</td>
+                                    <td>@item.DataSai</td>
+                                    <td>@item.CodPlano</td>
+                                    <td>@item.NomeServ</td>
+                                    <td>@item.CentroCusto</td>
+                                    <td>@item.Leito</td>
+                                </tr>
+
+                                <tr class="linha_corpo_evolucao invisivel" id="@linha_corpo">
+                                    <td colspan="10" ondblclick="@duploclick" bgcolor='white' class="tdformulario">
+                                        <table>
+                                            <tr>
+                                                <td style="width:25%; font-weight:700;">NumAtend</td>
+                                                <td style="width:25%; font-weight:700;">DataHora</td>
+                                                <td style="width:25%; font-weight:700;">CodLei</td>
+                                                <td style="width:25%; font-weight:700;">DTEntrada</td>
+                                            </tr>
+                                            @foreach (var item2 in Model.listaTransferenciaPeriodo.Where(x=> x.NumAtend == item.NumAtend))
+                                            {        
+                                                <tr>
+                                                    <td style="width:25%;">@item2.NumAtend</td>
+                                                    <td style="width:25%;">@item2.DataHora</td>
+                                                    <td style="width:25%;">@item2.CodLei</td>
+                                                    <td style="width:25%;">@item2.DTEntrada</td>
+                                                </tr>
+                                                
+                                            }
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                                
+                            }
+                        }
+                    
+        </tbody>
+
+    </table>
+
+<script>    
+
+     function CliqueLinhaCab(numlinha, tipoform) {
+            console.log("CabecalhoCLIQUE " + numlinha);
+
+            var linhacab = numlinha + tipoform + "_cab";
+            var linhacorpo = numlinha + tipoform + "_corpo";
+
+            if ($('#' + linhacorpo).hasClass('invisivel')) {
+                $('#' + linhacorpo).removeClass('invisivel');
+            }
+            else {
+                $('#' + linhacorpo).addClass('invisivel');
+            }
+
+        }
+
+    function DuploCliqueLinhaCorpo(numlinha, tipoform) {
+        var linhacab = numlinha + tipoform + "_cab";
+        var linhacorpo = numlinha + tipoform + "_corpo";
+
+        $('#' + linhacorpo).addClass('invisivel');
+    }
+
+
+    function getSearchParams(k) {
+        var p = {};
+        location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (s, k, v) { p[k] = v })
+        return k ? p[k] : p;
+    }
+
+    function buscaInternacaoPaciente() {
+        var dataInicial = $("#data-inicial")[0].value;
+        var dataFinal = $("#data-final")[0].value;
+        
+        //if(searchParams.has('codpac')){
+        //    codpac = searchParams.get('codpac');
+        //}
+
+
+        var tmpI = dataInicial.split('/');
+        var tmpF = dataFinal.split('/');
+
+        var diaI = tmpI[0];
+        var mesI = tmpI[1];
+        var anoI = tmpI[2];
+
+        var diaF = tmpF[0];
+        var mesF = tmpF[1];
+        var anoF = tmpF[2];
+
+        if (dataInicial != null || dataInicial != '') {
+            if (dataFinal != null || dataFinal != '') {
+
+
+                //console.log("dia:" + diaI + " mes:" + mesI + " ano:" + anoI);
+                //console.log("dia:" + diaF + " mes:" + mesF + " ano:" + anoF);
+
+
+
+                if ((diaI > 0 && diaF > 0) && (diaI < 32 && diaF < 32)) {
+                    if ((mesI > 0 && mesF > 0) && (mesI < 13 && mesF < 13)) {
+                        if ((anoI > 1900 && anoF > 1900) && (anoI < 2050 && anoF < 2050)) {
+                            if ((anoF > anoI) && ((mesF - mesI) <= 1)) {
+
+                                if ((anoF > anoI) && (mesI == 12 && mesF == 1)) {
+
+                                    console.log("data aceitável")
+                                }
+                                else alert("Favor inserir intervalo menor que 30 dias.")
+                            }
+                            else if ((anoF == anoI) && ((mesF - mesI) > 1)) {
+                                alert("Favor inserir intervalo menor que 30 dias.")
+                            }
+                            else if ((anoF == anoI) && ((mesF - mesI) == 1) && (diaI < diaF)) {
+                                alert("Favor inserir intervalo menor que 30 dias.")
+                            }
+                            else if ((anoF < anoI) || (anoF == anoI && (mesF < mesI)) || (mesF == mesI && diaF < diaI)) {
+                                alert("Favor inserir data corretamente.")
+                            }
+                        }
+                        else {
+                            alert("Ano inválido!")
+                        }
+                    }
+                    else {
+                        alert("Mês inválido!")
+                    }
+                }
+                else alert("Dia inválido!")
+
+            }
+        }
+
+        var data1 = anoI + "-" + mesI + "-" + diaI + " 00:00:00";
+        var data2 = anoF + "-" + mesF + "-" + diaF + " 23:59:59";
+
+        //console.log("DATA1" + data1);
+
+        var urlcomparam = "InternacaoPeriodo";
+
+        urlcomparam += "?";        
+        urlcomparam += "&dtentrada=" + data1;
+        urlcomparam += "&dtsaida=" + data2;
+
+        console.log("URLPARAM"+urlcomparam)
+
+        $("#pacientesInternados").html();
+        $.get('/Home/' + urlcomparam, function (data) {
+            console.log("pacientesInternados");
+            $("#pacientesInternados").html(data);
+        });
+    }
+

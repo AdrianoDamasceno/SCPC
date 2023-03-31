@@ -1,0 +1,66 @@
+﻿@model SCPCFinal.Models.LoginModel
+@{
+       //ViewData["Title"] = "Login SCPC";
+        Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="css/telaLogin.css">
+
+  <style>
+    #modulo
+    {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+  </style>
+</head>
+<div class="telaDeLogin">
+
+@using(Html.BeginForm("Login", "Home", FormMethod.Post))
+{
+
+
+            <div class="imgcontainer">
+              <img src="img/logo-santa-casa.png" alt="Avatar" class="avatar">
+            </div>
+
+            <div class="mensagem_login"><center><font color="darkred">
+                @Html.DisplayFor(m => m.Mensagem)
+                </font>
+            </center>
+            </div>
+
+            <div class="container">
+              <label for="Usuario"><b>Login</b></label>
+              @Html.TextBoxFor(m => m.UsuarioSCPC, new { @class = "form-control" })
+            
+              <label for="Senha"><b>Senha</b></label>
+                @Html.PasswordFor(m => m.SenhaSCPC, new { @class = "form-control" })
+
+              <label for="Modulo"><b>Módulo</b></label>
+                @Html.DropDownListFor(m => m.Modulo, Model.ListaModulos, "Selecione", new { @id = "modulo" })
+                    
+              <button type="submit" value="Submit">Enviar</button>
+              <!--<label><input type="checkbox" checked="checked" name="remember"> Lembrar de mim
+              </label>-->
+            </div>
+           
+
+}
+            <div class="container" style="background-color:#f1f1f1">
+              <button type="button" class="cancelbtn">Cancelar</button>
+              <span class="psw">Esqueceu a <a href="#">senha</a>?</span>
+            </div>
+            
+            <div class="retorno"></div>          
+            
+      </div>
+

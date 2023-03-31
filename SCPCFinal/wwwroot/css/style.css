@@ -1,0 +1,388 @@
+﻿.corpo {
+    overflow: auto;
+}
+
+#botaoProntuario {
+    background-color: #223a66;
+    color: white;
+    padding: 8.5px 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.5s all;
+    display: inline;
+    vertical-align: top;
+    align-content: center;
+}
+
+    #botaoProntuario:hover {
+        color: #ebb434;
+    }
+
+.inputProntuario {
+    padding: 10px 5px;
+    display: inline;
+    border: 2px solid #223a66;
+    border-radius: 10px;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+    /* Style the buttons inside the tab */
+    .tab button {
+        background-color: inherit;
+        float:left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+        /* Change background color of buttons on hover */
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 1s;
+}
+
+/* Fade in tabs */
+@-webkit-keyframes fadeEffect {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeEffect {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.logo-sc {
+    display: inline;
+    float: left;
+    padding: 10px;
+}
+
+.cabecalho {
+    width: 100%;
+    display: flex;
+}
+
+#containerProntuario {
+    width: 70%;
+    display: inline-block;
+    margin-right: 3%;
+    margin-top: 30px;
+    text-align: right;
+}
+
+
+.navbar {
+    overflow: hidden;
+    background-color: #aaa;
+    border: 2px solid #f1f1f1;
+}
+
+    .navbar a {
+        float: left;
+        font-size: 16px;
+        color: black;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        transition: 0.5s all;
+    }
+
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+    .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: black;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+        margin: 0;
+        transition: 0.5s all;
+    }
+
+    .navbar a:hover, .dropdown:hover .dropbtn {
+        background-color: #ddd;
+    }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+    .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+#formulario {
+    width: 95%;
+    margin: auto;
+    border: 5px solid #223a66;
+    border-radius: 10px;
+    background: #DDDDDD;
+    margin-top: 1em;
+    padding-left: 2.5%;
+    display: block;
+    color: #000;
+}
+
+
+
+#tdcoluna1 {
+    padding: 0;
+    width: 25%;
+    vertical-align: top;
+}
+
+
+
+#tdcoluna2 {
+    padding: 0;
+    width: 25%;
+    vertical-align: top;
+}
+
+#tdcoluna3 {
+    vertical-align: top;
+    width: 25%;
+    padding: 0;
+}
+
+#tdcoluna4 {
+    vertical-align: top;
+    width: 25%;
+    padding: 0;
+}
+
+
+
+.titulo-principal {
+    font-size: 40px;
+    margin-bottom: 1em;
+    padding: 50px;
+}
+
+#btn {
+    margin: 0 0 50px 50px;
+}
+
+
+form label, form legend, .input-padrao {
+    display: inline-block;
+    padding: 10px 5px;
+    width: 90%;
+    font-weight: bold;
+    font-family: "Arial";
+}
+
+.input-padrao2 {
+    width: 90%;
+    height: 10em;
+    margin-left: 5%;
+    padding: 10px;
+}
+
+
+.enviar {
+    width: 100%;
+    padding: 15px 0;
+    background: #223a66;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    transition: 1s all;
+    cursor: pointer;
+}
+
+.botaoenviar {
+    width: 20%;
+    margin: 1.5em 40%;
+}
+
+.enviar:hover {
+    background: navy;
+    transform: scale(1.05);
+    color: #ebb434;
+}
+
+.input-padrao {
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+
+
+.endereço {
+    display: inline-block;
+    width: 70%;
+}
+
+
+.numero {
+    display: inline-block;
+    width: 20%;
+}
+
+.datanascimento {
+    display: inline-block;
+    width: 70%;
+}
+
+
+
+.idade {
+    display: inline-block;
+    width: 20%;
+}
+
+#labelgenero {
+    display: flex;
+}
+
+#radio-masculino, #radio-feminino {
+    margin: 0;
+}
+
+textarea {
+    resize: none;
+}
+
+.tabelaFormatada {
+    table-layout: fixed;
+    width: 100%
+}
+
+.tdformulario {
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+}
+
+div.w3-modal-content {
+    width: fit-content;
+    border-radius: 10px;
+}
+
+.invisivel {
+    visibility: collapse;
+}
+
+.paciente-atual {
+    width: 450px;
+    padding: 1em;
+    display: inline;
+}
+
+.div-paciente {
+    margin: auto;
+    width: auto;
+    position: relative;
+    display: inline;
+    margin-left: 8%;
+    margin-right: 2%;
+}
+
+#exames {
+    width: auto;
+}
+
+.modal {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: fit-content; /* Could be more or less, depending on screen size */
+    border-radius: 10px;
+}
+
+#spinner {
+    margin-left: 8px;
+}
+
+#selectServico{
+    height:1000px;
+}

@@ -1,0 +1,930 @@
+﻿@model SCPCFinal.Models.PEPModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet"  href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>    
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+
+<style>
+
+        #selectServico {
+            height: 800px;
+            font-size: 12px;
+            
+        }
+        #selectCentroCusto{
+            height: 800px;
+            font-size: 12px;
+        }
+        #selectEspecialidades{
+            height: 800px;
+            font-size: 12px;
+        }
+        #selectConvenio{
+            height: 800px;
+            font-size: 12px;
+        }
+
+        #tabelaCacon{
+            font-size:12px;
+        }
+
+        
+
+</style>
+
+<script>
+            
+
+    $(function () {
+
+
+            $("#botaoProntuario").click(function () {               
+
+                var data = [
+                    [
+                        "Tiger Nixon",
+                        "System Architect",
+                        "Edinburgh",
+                        "5421",
+                        "2011/04/25",
+                        "$3,120"
+                    ],
+                    [
+                        "Garrett Winters",
+                        "Director",
+                        "Edinburgh",
+                        "8422",
+                        "2011/07/25",
+                        "$5,300"
+                    ]
+                ]
+
+                var table = $('#BuscaPaciente').DataTable({
+                    "proccessing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        url: "@Url.Action("BuscaPaciente", "Home")",
+                        type: 'POST'
+                    },
+                    "language": {
+                        "search": "",
+                        "searchPlaceholder": "Search..."
+                    },
+
+                    data: data   
+                   
+                    
+                });
+                
+                
+
+                $('#id01').show();
+            });
+     });
+
+ </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#data-inicial').mask('00/00/0000');
+            $('#data-final').mask('00/00/0000');
+            $('#data-inicialConsumos').mask('00/00/0000');
+            $('#data-finalConsumos').mask('00/00/0000');
+
+            
+            //document.getElementById('tabelaServicosPeriodo').style.display='none';
+            //document.getElementById('tabelaProdutosPeriodo').style.display = 'none';
+
+        });
+
+    </script>
+
+</head>
+
+<body class="corpo">
+    @{
+        using (Html.BeginForm("PEP", "Home", FormMethod.Get, new { id = "codpac" }))
+        { }
+    }
+
+
+<div class="cabecalho">  
+  <div class="logo-sc"><img src="/img/logo-santa-casa.png" ></div>
+   <div class="div-paciente"><input  class="paciente-atual" value="@Html.DisplayFor(m => m.formulario.NomeSocial)" disabled></input></div>
+
+        <div id="myModal" class="modal invisivel">
+            <div class="modal-content rounded-0">
+                <img src="~/img/spinner.gif" alt="Spinner" id="spinner">
+                <p id="msg-spinner">Aguarde...</p>
+            </div>
+        </div>
+  <div id="containerProntuario">
+                          
+            <input type="text" id="inputProntuario" class="inputProntuario" placeholder="Buscar Prontuário" name="prontuário" onkeypress="handle(event)">
+            
+            <button id="botaoProntuario"><span class="material-symbols-outlined">search</span></button>
+        
+
+    </div>
+ 
+</div> 
+  <div class="tab">
+    
+    <button class="tablinks" onclick="mudarAba(event, 'formulario')">Formulário</button>
+    <button class="tablinks" onclick="mudarAba(event, 'atendimentos')">Atendimentos</button>
+    <button class="tablinks" onclick="mudarAba(event, 'consumos')">Consumos</button>
+    <button class="tablinks" onclick="mudarAba(event, 'exames')">Exames</button>
+    <button class="tablinks" onclick="mudarAba(event, 'prescricao')">Prescrição</button>
+    <button class="tablinks" onclick="mudarAba(event, 'evolucao')">Evolução</button>
+    <button class="tablinks" onclick="mudarAba(event, 'relatorios')">Relatórios</button>
+    
+  </div>
+
+  <div id="formulario" class="tabcontent"> 
+     
+    <table class="tabelaformulario">
+      <tr><td id="tdcoluna1">
+          <form class="coluna1">
+            <label for="prontuario">Prontuário</label>
+            <input type="text" id="prontuario" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.NumProntuario)" disabled>
+
+            <label for="paciente">Paciente</label>
+            <input type="text" id="paciente" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.NomePaciente)" disabled> 
+
+            <label for="nomesocial">Nome Social</label>
+            <input type="text" id="nomesocial" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.NomeSocial)" disabled> 
+
+            <div class="datanascimento">
+                <label for="datanascimento">Nascimento</label>
+                            <input type="text" id="datanascimento" class="input-padrao" placeholder="XX/XX/XXXX" value="@Html.DisplayFor(m => m.formulario.DataNascimento)" disabled>
+                        </div>
+            
+            <div class="idade">
+                <label for="idade">Idade</label>
+                <input type="text" id="idade" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.Idade)" disabled>
+            </div>
+            
+
+            
+
+            <div class="endereço">
+                <label for="endereço">Endereço</label>
+                <input type="text" id="endereço" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.Endereco)" disabled>
+            </div>
+
+            <div class="numero">
+
+                <label for="numero">Nº</label>
+                <input id="numero" type="number" id="numero" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.NumEndereco)" disabled>
+            </div>
+
+            
+
+        </form>
+        </td>
+        
+        <td id="tdcoluna2">
+        <form class="coluna2">  
+          <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.Bairro)" disabled>
+
+            <label for="municipio">Município</label>
+            <input type="text" id="municipio" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.Municipio)" disabled>
+
+            <label for="cep">CEP</label>
+            <input type="text" id="cep" class="input-padrao"  placeholder="XXXXX-XXX" value="@Html.DisplayFor(m => m.formulario.CEP)" disabled>
+
+            <label for="estadocivil">Estado Civil</label>
+            <input type="text" id="estadocivil" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.EstadoCivil)" disabled>
+
+            <div id="uf">
+                <label for="uf">UF</label>
+                <input type="text" id="uf" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.UF)" disabled>
+                    
+            </div>
+
+                 
+
+        </form>
+        </td>
+
+        <td id="tdcoluna3">
+          <form class ="coluna3">
+          
+            <label for="pai">Pai</label>
+            <input type="text" id="pai" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.NomePai)" disabled>
+
+            <label for="mae">Mãe</label>
+            <input type="text" id="mae" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.NomeMae)" disabled>
+
+            <label for="raça">Raça/Cor</label>
+            <input type="text" id="raça" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.RacaCor)" disabled>
+            
+            <label for="regCACON">Reg. CACON</label>
+            <input type="text" id="regCACON" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.extra07)" disabled>
+            
+            <div>
+              <label for="sexo">Sexo</label>
+              <input type="text" id="sexo" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.Sexo)" disabled>
+              
+            </div>
+
+          </form>                
+        </td>
+
+        <td id="tdcoluna4">
+          <form class="coluna4">
+
+          <label for="profissao">Profissão</label>
+          <input type="text" id="profissao" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.Profissao)" disabled>
+
+          <label for="rg">RG</label>
+          <input type="text" id="rg" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.RG)" disabled>
+
+          <label for="cpf">CPF</label>
+          <input type="text" id="cpf" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.CPF)" disabled>
+
+          <label for="telefone">Telefone</label>
+          <input type="text" id="telefone" class="input-padrao" placeholder="(XX) XXXXX-XXXX" pattern="+94[7-9]{2}-[0-9]{3}-[0-9]{4}" value="@Html.DisplayFor(m => m.formulario.Telefone)" disabled>
+
+          <label for="observacao">Observação</label>
+          <textarea cols="5" rows="1" id="obsevacao" class="input-padrao" value="@Html.DisplayFor(m => m.formulario.Observacao)" disabled></textarea>
+                                                    
+          </form>
+          
+        </td>
+        
+      </tr>
+      
+      
+    </table>    
+  
+  </div>
+
+  
+  
+ 
+    <div class="tabcontent" id="consumos">
+
+      <div class="navbar">
+        <a href="#" onclick="mudarAba(event, 'consumos-produtos')">Produtos</a>
+        
+        <a href="#" onclick="mudarAba(event, 'consumos-serviços')">Serviços</a>        
+          
+      </div>
+                
+    </div>
+    
+    
+  
+  
+  <div id="consumos-produtos" class="tabcontent">
+    
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Código</th>
+        <th>Produto</th>
+        <th>Unidade</th>
+        <th>Quantidade</th>
+        <th>Centro de Custo</th>
+      </tr>
+
+      @if(Model.consumoProdutos is not null){
+            
+            @foreach(var item in Model.consumoProdutos)
+            {
+                <tr>
+                    <td>@item.Data</td>
+                    <td>@item.Codigo</td>
+                    <td>@item.Descricao</td>
+
+                    <td>@item.Unidade</td>
+                    <td>@item.Quantidade</td>
+                    <td>@item.CentroCusto</td>
+                </tr>
+            }
+      }
+
+    </table>
+  </div>
+
+  <div id="consumos-serviços" class="tabcontent">
+        
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Quantidade</th>
+        <th>Centro de Custo</th>
+      </tr>
+
+      @if(Model.consumoServicos is not null){
+            
+            @foreach(var item in Model.consumoServicos)
+            {
+                <tr>
+                    <td>@item.Data</td>
+                    <td>@item.Codigo</td>
+                    <td>@item.Descricao</td>
+                    <td>@item.Quantidade</td>
+                    <td>@item.CentroDeServico</td>
+                </tr>
+            }
+      }      
+
+      </table>
+  </div>
+
+  <div id="exames" class="tabcontent">
+    <h3>Exames</h3>
+
+        <table class="tabelaFormatada">
+      <tr>
+        <th>Num. Atend.</th>
+        <th>Num. Req.</th>
+        <th>Prestador Solicitante</th>
+        <th>Data Sol.</th>
+        <th>Num. Item</th>
+        <th>Descrição</th>
+        <th>Quantidade Sol.</th>
+        <th>Data Rlz.</th>        
+      </tr>
+
+            @if (Model.exames is not null)
+            {
+
+                @foreach (var item in Model.exames)
+                {
+                    string tipoform = "_exames";
+                    string linhaid = item.NumReq + item.NumItem;
+                    string linha_cab = linhaid + tipoform + "_cab";
+                    string linha_corpo = linhaid + tipoform + "_corpo";
+                    string onclick = String.Format("CliqueLinhaCab('{0}', '{1}')", linhaid, tipoform);
+                    string duploclick = String.Format("DuploCliqueLinhaCorpo('{0}', '{1}')", linhaid, tipoform);
+
+                    <tbody>
+                    <tr class="linha_cab_evolucao" id="@linha_cab" onclick="@onclick">
+                        <td>@item.NumAtend</td>
+                        <td>@item.NumReq</td>
+                        <td>@item.PrestSol</td>
+                        <td>@item.DataSol</td>
+                        <td>@item.NumItem</td>
+                        <td>@item.Descricao</td>
+                        <td>@item.QtdSol</td>
+                        <td>@item.DataRlz</td> 
+                    </tr>
+                     
+                    <tr class="linha_corpo_evolucao invisivel" id="@linha_corpo">
+                            <td colspan="8" ondblclick="@duploclick" bgcolor='white' class="tdformulario">@Html.Raw(item.TextoResultado)</td>
+                    </tr>
+                    </tbody>
+                }
+            }     
+
+      </table>
+      
+  </div>
+
+
+  <div id="evolucao" class="tabcontent">
+    <h3>Evolução</h3>
+
+      <table tabelaFormatada>
+      <tr>
+                <th>Num. Atend.</th>
+                <th>Num. Seq.</th>
+                <th>Data Gravação</th>
+                <th>Prestador</th>
+                <th>Ficha Evolução</th>
+                
+        
+      </tr>
+
+            @if (Model.evolucao is not null)
+            {
+
+                @foreach (var item in Model.evolucao)
+                {
+                    string tipoform = "_evolucao";
+                    string linhaid = item.NumAtend + item.NumSeq;
+                    string linha_cab = linhaid + tipoform + "_cab";
+                    string linha_corpo = linhaid + tipoform + "_corpo";
+                    string onclick = String.Format("CliqueLinhaCab('{0}', '{1}')", linhaid, tipoform);
+                    string duploclick = String.Format("DuploCliqueLinhaCorpo('{0}', '{1}')", linhaid, tipoform);
+
+                    <tbody>
+                        <tr class="linha_cab_evolucao" id="@linha_cab" onclick="@onclick">
+                            <td>@item.NumAtend</td>
+                            <td>@item.NumSeq</td>
+                            <td>@item.DataGrav</td>
+                            <td>@item.NomePrest</td>
+                            <td>@item.NomeTexto</td>
+                        </tr>
+                       
+                        <tr class="linha_corpo_evolucao invisivel" id="@linha_corpo">
+                        <td colspan="5" ondblclick="@duploclick" bgcolor='white'>@Html.Raw(item.CorpoTexto)</td>
+                        </tr>
+
+                    </tbody>
+                }
+            }
+
+      </table>
+
+  </div>
+
+  
+  <div id="prescricao" class="tabcontent">
+    <h3>Prescrição</h3>
+    
+    <table>
+      <tr>
+        <th>Tipo</th>
+        <th>Data Inicial</th>
+        <th>Num. Atend.</th>
+        <th>Num. Prescr.</th>
+        <th>Num. Item</th>
+        <th>Cod. Produto</th>
+        <th>Cod. Serviço</th>
+        <th>Desc. Produto</th>
+        <th>Desc. Serviço</th>
+        <th>Descrição</th>
+        <th>Cancelado</th>
+        <th>Via</th>
+        <th>Periodo</th>
+        <th>Qtd. Total</th>        
+      </tr>
+
+            @if (Model.prescricao is not null)
+            {
+
+                @foreach (var item in Model.prescricao)
+                {
+                    <tr>
+                        <td>@item.Tipo</td>
+                        <td>@item.DataIni</td>
+                        <td>@item.NumAtend</td>
+                        <td>@item.NumPrescr</td>
+                        <td>@item.NumItem</td>
+                        <td>@item.CodProd</td>
+                        <td>@item.CodIntSv</td>
+                        <td>@item.Descricao</td>
+                        <td>@item.DescIntSv</td>
+                        <td>@item.Descricao2</td>
+                        <td>@item.Cancelado</td>
+                        <td>@item.Via</td>
+                        <td>@item.Periodo</td>
+                        <td>@item.QtdTotal</td>
+                    </tr>
+                }
+            }
+
+      </table>
+  </div>
+
+  <div id="atendimentos" class="tabcontent">
+      <h3>Atendimentos</h3>
+      <table>
+          <thead>
+                <th>Num. Atend.</th>
+                <th>Tipo Atend.</th>                
+                <th>Data Atend.</th>
+                <th>Data Sai.</th>
+                <th>Plano Conv.</th>
+                <th>Nome Serv.</th>
+                <th>Centro Custo</th>
+                <th>Prestador Resp.</th>
+           </thead>
+           <tbody>
+                @if (Model.atendimento is not null)
+                {
+
+                    @foreach (var item in Model.atendimento)
+                    {
+                    <tr>
+                        <td>@item.NumAtend</td>
+                        <td>@item.TipoAtend</td>                        
+                        <td>@item.DataAtend</td>
+                        <td>@item.DataSai</td>
+                        <td>@item.CodPlano</td>
+                        <td>@item.NomeServ</td>
+                        <td>@item.CentroCusto</td>
+                        <td>@item.NomePrest</td>                        
+                    </tr>
+                    }
+                }
+
+            </tbody>
+
+      </table>
+  </div>
+
+    
+
+  <div id="relatorios" class="tabcontent">      
+
+      <div class="navbar">
+            
+            <a href="#" onclick="mudarAba(event, 'consumosDoPacientePeriodo')">Consumos do Paciente no Período</a>
+    </div>
+  </div>
+
+
+  <div id="consumosDoPacientePeriodo" class="tabcontent" onclick="buscaTabelaConsumos()">
+      <h3>Relatórios - Consumos do Paciente no Período </h3>
+
+        <table>
+            <thead>
+            <th colspan="6">
+                Data: <input id="data-inicialConsumos" placeholder="XX/XX/XXXX" /> a <input id="data-finalConsumos" placeholder="XX/XX/XXXX" />
+                <label for="selectConsumosPeriodo" style="margin-left:40px">Tipo de Consumo:</label>
+                <select id="selectConsumosPeriodo" name="selectConsumosPeriodo" style="font-size:larger; font-weight:200; padding: 2px; vertical-align:top">
+                    <option value="S">Serviços</option>
+                    <option value="P">Produtos</option>
+                </select>
+                <button id="btnConsumosPaciente" onclick="buscaConsumosPaciente()" style="margin-left:40px">Buscar</button>
+            </th>
+            </thead>
+        </table>
+  </div>
+
+  <!---------------------------------------------------------Prontuário--------------------->
+  
+<div>       
+    <div id="id01" class="w3-modal">
+      <div class="w3-modal-content">
+        <header class="w3-container"> 
+          <span onclick="document.getElementById('id01').style.display='none'" 
+          class="w3-button">&times;</span>
+          
+        </header>
+        <div class="w3-container">
+            <div class="table-responsive">
+                <table id="pacientes">
+                    <thead>
+                        <tr>
+                            <th>Prontuário</th>
+                            <th>Nome</th>
+                            <th>Data Nasc.</th>                            
+                            <th>Plano</th>
+                            <th>Filiação</th>
+                            <th>Pasta</th>
+                            <th>Reg. CACON</th>
+                            <th>RG</th>
+                            <th>Cartão SUS</th>
+                            <th>Matrícula</th>
+                            <th>Unid.</th>
+                            <th>CPF</th>
+                        </tr>
+                    </thead>
+                </table>
+                      
+            </div>            
+        </div> 
+      </div>
+    </div>
+  </div>
+  
+<!-------------------------------------------------------------------------------------------------->
+<script>
+    function buscaTabelaConsumos(){
+            var dataInicial = $("#data-inicialConsumos")[0].value;
+            var dataFinal = $("#data-finalConsumos")[0].value;                     
+            var opcao = $('#selectConsumosPeriodo option:selected').val();
+            let searchParams = new URLSearchParams(window.location.search);
+            var codpac = 0;
+
+            console.log(dataInicial + dataFinal + opcao + codpac);
+
+            if(searchParams.has('codpac'))
+            codpac = searchParams.get('codpac');
+
+                console.log("TABELACONSUMOS");
+
+            //$("#consumosDoPacientePeriodo").html(aguarde);
+            //    $.get("@Url.Action("TabelaConsumos")", function (data) {
+            //        console.log("TESTE");
+            //        $("#consumosDoPacientePeriodo").html(data);
+            //    });
+            
+    }
+    </script>
+
+
+<script>
+
+    function getSearchParams(k){
+         var p={};
+         location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
+         return k?p[k]:p;
+}
+
+        function buscaConsumosPaciente(){
+            var dataInicial = $("#data-inicialConsumos")[0].value;
+            var dataFinal = $("#data-finalConsumos")[0].value;                     
+            var opcao = $('#selectConsumosPeriodo option:selected').val();
+            var searchParams = new URLSearchParams(window.location.search);
+            var codpac = 0;
+
+            codpac = getSearchParams('codpac');
+            //if(searchParams.has('codpac')){
+            //    codpac = searchParams.get('codpac');
+            //}
+
+            
+            var tmpI = dataInicial.split('/');
+            var tmpF = dataFinal.split('/');
+
+            var diaI = tmpI[0];
+            var mesI = tmpI[1];
+            var anoI = tmpI[2];
+
+            var diaF = tmpF[0];
+            var mesF = tmpF[1];
+            var anoF = tmpF[2];
+            
+            if (dataInicial != null || dataInicial != '') 
+            {
+                if (dataFinal != null || dataFinal != '')
+                {
+                    
+
+                    console.log("dia:" + diaI + " mes:" + mesI + " ano:" + anoI);
+                    console.log("dia:" + diaF + " mes:" + mesF + " ano:" + anoF);
+                                   
+                    
+                    
+                        if ((diaI > 0 && diaF > 0) && (diaI < 32 && diaF < 32)) {
+                            if ((mesI > 0 && mesF > 0) && (mesI < 13 && mesF < 13)) {
+                                if ((anoI > 1900 && anoF > 1900) && (anoI < 2050 && anoF < 2050)) {
+                                    if ((anoF > anoI) && ((mesF - mesI) <= 1)) {
+
+                                        if ((anoF > anoI) && (mesI == 12 && mesF == 1)) {
+
+                                            console.log("data aceitável")
+                                        }
+                                        else alert("Favor inserir intervalo menor que 30 dias.")
+                                    }
+                                    else if ((anoF == anoI) && ((mesF - mesI) > 1)) {
+                                        alert("Favor inserir intervalo menor que 30 dias.")
+                                    }
+                                    else if ((anoF == anoI) && ((mesF - mesI) == 1) && (diaI < diaF)) {
+                                        alert("Favor inserir intervalo menor que 30 dias.")
+                                    }
+                                    else if ((anoF < anoI) || (anoF == anoI && (mesF < mesI)) || (mesF == mesI && diaF < diaI)) {
+                                        alert("Favor inserir data corretamente.")
+                                    }
+                                }
+                                else {
+                                    alert("Ano inválido!")
+                                }
+                            }
+                            else {
+                                alert("Mês inválido!")
+                            }
+                        }
+                        else alert("Dia inválido!")                       
+                    
+                }
+            }
+
+            var data1 = anoI+"-"+mesI+"-"+diaI+" 00:00:00";
+            var data2 = anoF + "-" + mesF + "-" + diaF + " 23:59:59";
+
+            console.log("DATA1" + data1);
+
+            //document.getElementById('tabelaServicosPeriodo').style.display='none';
+            //document.getElementById('tabelaProdutosPeriodo').style.display='none';
+
+            var urlcomparam = "TabelaConsumos";
+
+            urlcomparam += "?";
+            urlcomparam += "opcao=" + opcao;
+            urlcomparam += "&codpac=" + codpac;
+            urlcomparam += "&data1=" + data1;
+            urlcomparam += "&data2=" + data2;
+            
+            $("#consumosDoPacientePeriodo").html();
+            $.get('/Home/'+urlcomparam, function (data) {
+                console.log("consumosDoPacientePeriodo");
+                    $("#consumosDoPacientePeriodo").html(data);
+            });        
+            
+        }
+</script>
+  <script>
+  function mudarAba(evt, nomeTabela) 
+  {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) 
+    {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) 
+    {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(nomeTabela).style.display = "block";
+    evt.currentTarget.className += " active";
+
+    var tab = nomeTabela;
+            if (tab == "pacientesCacon"){
+                aguarde();               
+                setTimeout(fadeModal, 3000);
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/pacientesCacon",
+                    
+                    success: function (dados) {
+                        if(dados != null){
+                            
+                        }
+                        alert("Hello: " + response.Name + " .\nCurrent Date and Time: " + response.DateTime);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+
+            }
+    function fadeModal(){
+                $("#myModal").fadeOut();
+    }
+  }
+  </script>
+
+   <script>
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+    
+    window.onclick = function(e) {
+      if (!e.target.matches('.dropbtn')) {
+      var myDropdown = document.getElementById("myDropdown");
+        if (myDropdown.classList.contains('show')) {
+          myDropdown.classList.remove('show');
+        }
+      }
+    }
+    </script>
+
+    <script>
+        $(document).ready(function() 
+        {
+            //NovoTeste();
+            $("#botaoProntuario").click(NovoTeste);
+
+        });
+
+        function NovoTeste(){
+            $("#pacientes").DataTable
+            ({
+                dom: 'Bfrtip',
+                buttons: [
+                'copy', 'csvHtml5', 'excelHtml5'
+                ],
+
+             data: null,
+                language: {
+                    "sProcessing": "Processando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "Resultado não encontrado",
+                    "semptyTable": "Tabela vazia",
+                    "sSearch": "Buscar:",
+                    "sInfo": "Mostrando registros de _START_ a _END_ do total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros de 0 a 0 do total de 0 registros",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Esta consulta pode demorar vários segundos. Por favor aguarde o término do processo...",
+                    //=================================
+                    "oPaginate": {
+                        "sFirst": "Primeira",
+                        "sLast": "Última",
+                        "sNext": "Próxima",
+                        "sPrevious": "Anterior"
+                    }
+                },
+
+                'ajax': 
+                {
+                    url:'/Home/GetList',
+                    type: 'GET',
+                    datatype:'json'
+                },
+                'columns':
+                [
+                    {'data':'prontuario'},
+                    {'data':'nome'},
+                    {'data':'dataNasc'},
+                    {'data':'plano'},
+                    {'data':'filiacao'},
+                    {'data':'pasta'},
+                    {'data':'extra07'},
+                    {'data':'rg'},
+                    {'data':'cartaoSUS'},
+                    {'data':'matricula'},
+                    {'data':'unid'},
+                    {'data':'cpf'}
+                ]
+            });
+        }
+
+    </script>
+
+    <script>
+
+            var tabela = document.querySelector("#pacientes");
+            var idclicou = null;
+
+            tabela.addEventListener("dblclick", function(event)
+            {
+                console.log("Fui clicado com duplo clique");
+                      
+                idclicou = event.target.parentNode.firstChild.innerHTML;
+                console.log(idclicou);
+
+                location.href = '/Home/PEP?codpac='+idclicou;
+
+           
+            });
+
+            
+        
+    </script>
+
+    <script>
+        
+        function CliqueLinhaCab(numlinha, tipoform){
+            console.log("CabecalhoCLIQUE "+numlinha);
+
+            var linhacab = numlinha + tipoform + "_cab";
+            var linhacorpo = numlinha + tipoform + "_corpo";
+
+            if ($('#' + linhacorpo).hasClass('invisivel')){
+                $('#' + linhacorpo).removeClass('invisivel');
+            }
+            else {
+                $('#' + linhacorpo).addClass('invisivel');
+            }
+            
+        }
+
+        function DuploCliqueLinhaCorpo(numlinha, tipoform){
+            var linhacab = numlinha + tipoform + "_cab";
+            var linhacorpo = numlinha + tipoform + "_corpo";
+
+            $('#' + linhacorpo).addClass('invisivel');
+        }
+
+
+        function handle(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                aguarde();
+                redireciona();                                
+            }
+        }
+
+        function aguarde(){
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+            modal.classList.remove("invisivel");
+        }
+
+        function redireciona() {            
+
+            var x = document.getElementById("inputProntuario").value
+            location.replace("https://localhost:7281/Home/PEP?codpac=" + x)
+        }
+
+    </script>
+       
+
+</body>
+</html> 
